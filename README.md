@@ -1,6 +1,12 @@
 # Canvas_Game
 Work in progress
 
+## Installations and Requirements
+Requires use of matter.js - read more documentation at brm.io/matter-js
+
+Important to note these features in docs: world, engine, runner, render, body
+
+CDN can be found here - https://cdnjs.com/ (will need the script to work)
 
 ## Project Challenges
 
