@@ -34,6 +34,21 @@ const walls = [
 World.add(world, walls);
 
 // Maze generation
+const shuffle = (arr) => {
+  let counter = arr.length;
+
+  while(counter > 0) {
+    const index = Math.floor(Math.random() * counter);
+
+    counter--;
+
+    const temp = arr[counter];
+    arr[counter] = arr[index];
+    arr[index] = temp;
+  }
+
+  return arr;
+};
 
 const grid = Array(cells)
   .fill(null)
@@ -47,4 +62,51 @@ const horizontals = Array(cells - 1)
 .fill(null)
 .map(() => Array(cells).fill(false));
 
-console.log(verticals, horizontals);
+const startRow = Math.floor(Math.random() * cells);
+const startColumn = Math.floor(Math.random() * cells);
+
+// Algorithm for maze generation
+const stepThroughCell = (row, column) => { 
+  // If visited cell at [row, col], then return early
+  if (grid[row][column] === true) {
+    return;
+  }
+  // Mark this cell as being visited
+  grid[row][column] = true;
+  // Assemble randomly-ordered list of neighbords
+  const neighbors = shuffle([
+    [row - 1, column, 'up'], // up
+    [row, column + 1, 'right'], // right
+    [row + 1, column, 'down'], // down
+    [row, column - 1, 'left'] // left
+  ]);
+  console.log(neighbors);
+  // For each neighbor, do the following
+  for (let neighbor of neighbors) {
+    const [nextRow, nextColumn, direction] = neighbor;
+  // See if neighbor is out of bounds
+    if (nextRow < 0 || nextRow >= cells || nextColumn < 0 || nextColumn >= cells) {
+      continue;
+    }
+  // If we have visited neighbor, continue to next neighbor
+    if (grid[nextRow][nextColumn]) {
+      continue;
+    }
+  // Remove a wall from either horiz/vert array
+    if (direction === 'left') {
+      verticals[row][column - 1] = true;
+    } else if (direction === 'right') {
+      verticals[row][column] = true;
+    } else if (direction === 'up') {
+      horizontals[row - 1][column] = true;
+    } else if (direction === 'down') {
+      horizontals[row][column] = true;
+    }
+
+    stepThroughCell(nextRow, nextColumn);
+}
+  // Visit next cell
+
+};
+
+stepThroughCell(startRow, startColumn);
