@@ -14,7 +14,18 @@ const render = Render.create({
 Render.run(render);
 Runner.run(Runner.create(), engine);
 
-const shape = Bodies.rectangle(200, 200, 50, 50, {
-  isStatic: true
-});
-World.add(world, shape);
+// Walls
+const walls = [
+  // Top barrier: 400 units over, 0 units down, 800 units wide, 40 units tall
+  Bodies.rectangle(400, 0, 800, 40, { isStatic: true }),
+  // Bottom barrier
+  Bodies.rectangle(400, 600, 800, 40, { isStatic: true }),
+  // Left barrier
+  Bodies.rectangle(0, 300, 40, 600, { isStatic: true }),
+  // Right barrier
+  Bodies.rectangle(800, 300, 40, 600, { isStatic: true })
+];
+
+World.add(world, walls);
+
+World.add(world, Bodies.rectangle(200, 200, 50, 50));
