@@ -19,6 +19,14 @@ How do we detect when ball touches goal? | Matter JS to detect collisions betwee
  
 ---
 
+## Build a 2D MAZE
+- create a grid of cells
+- pick a random starting cell & iterate it
+- build a randomly-ordered list of neighbors for that cell
+- if a neighbor has been visited prev, remove it from the list
+- for each remaining neighbor, move to it and remove the wall between those cells
+- repeat for new neighbor
+
 ## Contributors
 
 Dany Chheang dany.chheang@gmail.com
