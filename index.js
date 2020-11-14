@@ -1,12 +1,13 @@
-const { Engine, Render, Runner, World, Bodies } = Matter;
+const { Engine, Render, Runner, World, Bodies, Body, Events } = Matter;
 
-const cells = 3; // cells in the horizontal/vertical edge
+const cells = 5; // cells in the horizontal/vertical edge
 const width = 600; // pixel values
 const height = 600; // pixel values
 
 const unitLength = width / cells;
 
 const engine = Engine.create();
+engine.world.gravity.y = 0;
 const { world } = engine;
 const render = Render.create({
   element: document.body,
@@ -24,13 +25,13 @@ Runner.run(Runner.create(), engine);
 // Walls
 const walls = [
   // Top barrier: 400 units over, 0 units down, 800 units wide, 40 units tall
-  Bodies.rectangle(width / 2, 0, width, 40, { isStatic: true }),
+  Bodies.rectangle(width / 2, 0, width, 2, { isStatic: true }),
   // Bottom barrier
-  Bodies.rectangle(width / 2, height, width, 40, { isStatic: true }),
+  Bodies.rectangle(width / 2, height, width, 2, { isStatic: true }),
   // Left barrier
-  Bodies.rectangle(0, height / 2, 40, height, { isStatic: true }),
+  Bodies.rectangle(0, height / 2, 2, height, { isStatic: true }),
   // Right barrier
-  Bodies.rectangle(width, height / 2, 40, height, { isStatic: true })
+  Bodies.rectangle(width, height / 2, 2, height, { isStatic: true })
 ];
 
 World.add(world, walls);
@@ -129,5 +130,81 @@ horizontals.forEach((row, rowIndex) => {
       }
     );
     World.add(world, wall);
+  });
+});
+
+verticals.forEach((row, rowIndex) => {
+  row.forEach((open, columnIndex) => {
+    if (open) {
+      return;
+    }
+
+    const wall = Bodies.rectangle(
+      columnIndex * unitLength + unitLength,
+      rowIndex * unitLength + unitLength / 2,
+      10,
+      unitLength,
+      {
+        isStatic: true
+      }
+    );
+    World.add(world, wall);
+  });
+});
+
+// Goal
+const goal = Bodies.rectangle(
+  width - unitLength / 2,
+  height - unitLength / 2,
+  unitLength * .7,
+  unitLength * .7,
+  {
+    label: 'goal',
+    isStatic: true
+  }
+);
+World.add(world, goal);
+
+// User ball
+const ball = Bodies.circle(
+  unitLength / 2, 
+  unitLength / 2,
+  unitLength / 4,
+  {
+    label: 'ball'
+  });
+World.add(world, ball);
+
+// Keypresses & controls
+document.addEventListener('keydown', event => {
+  const {x, y} = ball.velocity;
+  if (event.keyCode === 87) {
+    Body.setVelocity(ball, { x, y: y - 5 });
+  }
+
+  if (event.keyCode === 68) {
+    Body.setVelocity(ball, { x: x + 5, y });
+  }
+
+  if (event.keyCode === 83) {
+    Body.setVelocity(ball, { x, y: y + 5 });
+  }
+
+  if (event.keyCode === 65) {
+    Body.setVelocity(ball, { x: x - 5, y });
+  }
+});
+
+// Win condition
+Events.on(engine, 'collisionStart', event => {
+  event.pairs.forEach(collision => {
+    const labels = ['ball', 'goal'];
+
+    if (
+      labels.includes(collision.bodyA.label) && 
+      labels.includes(collision.bodyB.label) 
+    ) {
+      console.log('user won!');
+    }
   });
 });
