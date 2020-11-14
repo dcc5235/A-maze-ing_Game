@@ -27,6 +27,12 @@ How do we detect when ball touches goal? | Matter JS to detect collisions betwee
 - for each remaining neighbor, move to it and remove the wall between those cells
 - repeat for new neighbor
 
+## Shapes/Border Walls in 2D Maze
+- need border walls to prevent shapes from falling off page
+- can use shapes.js as sample idea to build border walls and shapes
+
+[Image example for shapes.js](https://twitter.com/DanyChheang/status/1327289887532441600)
+
 ## Contributors
 
 Dany Chheang dany.chheang@gmail.com
