@@ -1,6 +1,6 @@
 const { Engine, Render, Runner, World, Bodies } = Matter;
 
-const cells = 3; // cells in the horizontal/vertical edge
+const cells = 5; // cells in the horizontal/vertical edge
 const width = 600; // pixel values
 const height = 600; // pixel values
 
@@ -24,13 +24,13 @@ Runner.run(Runner.create(), engine);
 // Walls
 const walls = [
   // Top barrier: 400 units over, 0 units down, 800 units wide, 40 units tall
-  Bodies.rectangle(width / 2, 0, width, 40, { isStatic: true }),
+  Bodies.rectangle(width / 2, 0, width, 2, { isStatic: true }),
   // Bottom barrier
-  Bodies.rectangle(width / 2, height, width, 40, { isStatic: true }),
+  Bodies.rectangle(width / 2, height, width, 2, { isStatic: true }),
   // Left barrier
-  Bodies.rectangle(0, height / 2, 40, height, { isStatic: true }),
+  Bodies.rectangle(0, height / 2, 2, height, { isStatic: true }),
   // Right barrier
-  Bodies.rectangle(width, height / 2, 40, height, { isStatic: true })
+  Bodies.rectangle(width, height / 2, 2, height, { isStatic: true })
 ];
 
 World.add(world, walls);
@@ -150,3 +150,15 @@ verticals.forEach((row, rowIndex) => {
     World.add(world, wall);
   });
 });
+
+// Goal
+const goal = Bodies.rectangle(
+  width - unitLength / 2,
+  height - unitLength / 2,
+  unitLength * .7,
+  unitLength * .7,
+  {
+    isStatic: true
+  }
+);
+World.add(world, goal);
